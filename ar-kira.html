@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>キラ ⭐ AR召喚 · バスボール魔法</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap');
+
+:root {
+  --gold: #FFD93D;
+  --orange: #FF8C42;
+  --teal: #2DFFD6;
+  --pink: #FF4FA3;
+  --bg: #080C14;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); }
+
+/* ── SCREEN MANAGER ── */
+.screen { position: fixed; inset: 0; display: none; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ══════════════════════════════
+   SCREEN 1 · INTRO
+══════════════════════════════ */
+#s-intro {
+  background: var(--bg);
+  align-items: center; justify-content: center;
+  padding: 32px 24px;
+  overflow-y: auto;
+}
+
+/* Starfield */
+.starfield {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+  position: absolute; background: #fff; border-radius: 50%;
+  animation: twinkle linear infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.1; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.2); }
+}
+
+.intro-inner {
+  position: relative; z-index: 1;
+  max-width: 400px; width: 100%; text-align: center;
+}
+
+.brand-tag {
+  font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 28px;
+}
+
+/* Orb */
+.orb-wrap {
+  position: relative; width: 200px; height: 200px;
+  margin: 0 auto 28px; cursor: pointer;
+}
+.orb {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%,
+    rgba(255,255,255,0.9) 0%,
+    #ffe566 18%,
+    #ffaa20 40%,
+    #ff6b3d 65%,
+    #c0392b 100%);
+  box-shadow:
+    0 0 60px rgba(255,180,40,0.5),
+    0 0 120px rgba(255,100,40,0.25),
+    inset -20px -20px 40px rgba(0,0,0,0.25);
+  animation: orbPulse 3s ease-in-out infinite;
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 80px; line-height: 1;
+  filter: drop-shadow(0 8px 24px rgba(255,140,40,0.5));
+}
+@keyframes orbPulse {
+  0%,100% { transform: scale(1);    box-shadow: 0 0 60px rgba(255,180,40,0.5), 0 0 120px rgba(255,100,40,0.25); }
+  50%      { transform: scale(1.06); box-shadow: 0 0 80px rgba(255,200,60,0.7), 0 0 160px rgba(255,120,40,0.4); }
+}
+
+/* Orbit rings */
+.orbit {
+  position: absolute; top: 50%; left: 50%;
+  border-radius: 50%; border: 1px solid rgba(255,217,61,0.25);
+  animation: orbRing linear infinite;
+}
+.orbit:nth-child(1) { width: 230px; height: 230px; margin: -115px 0 0 -115px; animation-duration: 8s; }
+.orbit:nth-child(2) { width: 270px; height: 270px; margin: -135px 0 0 -135px; animation-duration: 12s; animation-direction: reverse; border-color: rgba(45,255,214,0.18); }
+.orbit:nth-child(3) { width: 310px; height: 310px; margin: -155px 0 0 -155px; animation-duration: 18s; border-color: rgba(255,79,163,0.12); }
+
+/* Orbit dots */
+.orbit::before {
+  content: '✦';
+  position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--gold); text-shadow: 0 0 8px var(--gold);
+}
+
+@keyframes orbRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.char-reveal-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.4rem; line-height: 1;
+  background: linear-gradient(135deg, var(--gold), var(--orange), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(255,180,40,0.4));
+  margin-bottom: 6px;
+}
+.char-reveal-sub {
+  font-size: 0.75rem; color: rgba(255,255,255,0.4);
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px;
+}
+
+.rarity-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 24px;
+}
+.badge {
+  padding: 4px 14px; border-radius: 20px;
+  font-family: 'Fredoka One', cursive; font-size: 0.78rem; letter-spacing: 0.1em;
+}
+.badge-ssr {
+  background: linear-gradient(135deg, rgba(255,217,61,0.25), rgba(255,100,40,0.25));
+  border: 1px solid rgba(255,180,40,0.5); color: var(--gold);
+  box-shadow: 0 0 16px rgba(255,180,40,0.25);
+}
+.badge-new {
+  background: rgba(255,79,163,0.2); border: 1px solid rgba(255,79,163,0.4); color: var(--pink);
+  animation: badgePop 1.5s ease-in-out infinite;
+}
+@keyframes badgePop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+/* Slogan mini */
+.intro-slogan {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,217,61,0.15);
+  border-radius: 16px; padding: 14px 18px; margin-bottom: 24px;
+  font-family: 'Fredoka One', cursive; font-size: 0.95rem;
+  line-height: 1.6; color: rgba(255,255,255,0.85);
+}
+.intro-slogan .who {
+  font-size: 0.6rem; font-family: 'Nunito', sans-serif;
+  font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 5px;
+}
+
+/* AR Button */
+.btn-ar {
+  width: 100%; padding: 18px;
+  border: none; border-radius: 20px; cursor: pointer;
+  font-family: 'Fredoka One', cursive; font-size: 1.15rem; letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #FF8C42, #FFD93D);
+  color: #1a0800;
+  box-shadow: 0 0 32px rgba(255,180,40,0.4), 0 4px 16px rgba(0,0,0,0.3);
+  transition: transform 0.18s, box-shadow 0.18s;
+  margin-bottom: 12px; position: relative; overflow: hidden;
+}
+.btn-ar::before {
+  content: '';
+  position: absolute; top: -50%; left: -60%;
+  width: 40%; height: 200%;
+  background: rgba(255,255,255,0.2);
+  transform: skewX(-20deg);
+  animation: shine 3s ease-in-out infinite;
+}
+@keyframes shine { 0%,100%{left:-60%} 50%{left:120%} }
+.btn-ar:active { transform: scale(0.97); }
+
+.btn-voice {
+  width: 100%; padding: 13px;
+  border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.12);
+  background: transparent; color: rgba(255,255,255,0.5);
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 10px;
+}
+.btn-voice.playing {
+  border-color: var(--teal); color: var(--teal);
+  box-shadow: 0 0 14px rgba(45,255,214,0.2);
+}
+
+.stats-row {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 4px;
+}
+.stat {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 10px 6px; text-align: center;
+}
+.stat-v { font-family: 'Fredoka One', cursive; font-size: 1rem; }
+.stat-k { font-size: 0.58rem; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
+
+
+/* ══════════════════════════════
+   SCREEN 2 · AR CAMERA
+══════════════════════════════ */
+#s-ar {
+  background: #000;
+  position: fixed; inset: 0; z-index: 100;
+}
+
+/* Camera feed */
+#camera-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror */
+}
+
+/* AR overlay canvas */
+#ar-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* AR Character overlay */
+.ar-char-layer {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding-bottom: 18vh;
+  pointer-events: none;
+}
+
+.ar-char-wrap {
+  position: relative;
+  animation: arFloat 3s ease-in-out infinite;
+}
+@keyframes arFloat {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-18px) scale(1.03); }
+}
+
+.ar-char-emoji {
+  font-size: clamp(100px, 28vw, 160px);
+  line-height: 1;
+  filter:
+    drop-shadow(0 0 30px rgba(255,180,40,0.7))
+    drop-shadow(0 30px 20px rgba(0,0,0,0.5));
+  display: block;
+}
+
+/* Shadow on floor */
+.ar-shadow {
+  width: 120px; height: 20px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.45), transparent 70%);
+  border-radius: 50%; margin: -8px auto 0;
+  animation: shadowPulse 3s ease-in-out infinite;
+}
+@keyframes shadowPulse {
+  0%,100% { transform: scale(1); opacity: 0.45; }
+  50%      { transform: scale(0.85); opacity: 0.25; }
+}
+
+/* Particle sparks around character */
+.ar-sparks { position: absolute; inset: -60px; pointer-events: none; }
+.spark {
+  position: absolute; font-size: 1.1rem;
+  animation: sparkOrbit linear infinite;
+}
+.spark:nth-child(1) { top: 10%; left: 10%; animation-duration: 3s;   animation-delay: 0s;    }
+.spark:nth-child(2) { top: 5%;  right: 15%; animation-duration: 4s;   animation-delay: 0.5s;  }
+.spark:nth-child(3) { top: 50%; left: 0%;   animation-duration: 3.5s; animation-delay: 1s;    }
+.spark:nth-child(4) { top: 45%; right: 2%;  animation-duration: 2.8s; animation-delay: 0.3s;  }
+.spark:nth-child(5) { bottom: 30%; left: 12%; animation-duration: 3.2s; animation-delay: 1.5s; }
+.spark:nth-child(6) { bottom: 25%; right: 10%; animation-duration: 4.2s; animation-delay: 0.8s; }
+@keyframes sparkOrbit {
+  0%,100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  30%,70% { opacity: 1; transform: scale(1.1) rotate(180deg); }
+}
+
+/* Scan line sweep */
+.ar-scanline {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(45,255,214,0.6), transparent);
+  box-shadow: 0 0 8px rgba(45,255,214,0.4);
+  animation: scanSweep 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes scanSweep {
+  0%   { top: 5%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 95%; opacity: 0; }
+}
+
+/* AR grid floor */
+.ar-grid-floor {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 35%;
+  background:
+    linear-gradient(transparent, rgba(45,255,214,0.03)),
+    repeating-linear-gradient(90deg, rgba(45,255,214,0.06) 0, rgba(45,255,214,0.06) 1px, transparent 0, transparent 10vw),
+    repeating-linear-gradient(0deg, rgba(45,255,214,0.06) 0, rgba(45,255,214,0.06) 1px, transparent 0, transparent 8vw);
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.8));
+  -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.8));
+}
+
+/* AR HUD */
+.ar-hud-top {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: env(safe-area-inset-top, 16px) 16px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent);
+  pointer-events: none;
+}
+.ar-hud-top .hud-left { pointer-events: all; }
+
+.ar-live-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(8px);
+  border: 1px solid rgba(45,255,214,0.35); border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em;
+  color: var(--teal); text-transform: uppercase;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--teal);
+  box-shadow: 0 0 6px var(--teal);
+  animation: livePulse 1s ease-in-out infinite;
+}
+@keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.ar-char-tag {
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,217,61,0.3); border-radius: 20px;
+  padding: 5px 14px;
+  font-family: 'Fredoka One', cursive; font-size: 0.9rem;
+  color: var(--gold);
+}
+
+/* Bottom controls */
+.ar-controls {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px 20px calc(env(safe-area-inset-bottom, 16px) + 16px);
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 60%, transparent);
+  display: flex; gap: 10px; align-items: center;
+}
+.btn-close-ar {
+  width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 1.2rem; cursor: pointer; color: white;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-capture {
+  flex: 1; height: 48px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  border: none; cursor: pointer;
+  font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: #1a0800;
+  box-shadow: 0 0 20px rgba(255,180,40,0.35);
+  transition: transform 0.15s;
+}
+.btn-capture:active { transform: scale(0.96); }
+.btn-voice-ar {
+  width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(45,255,214,0.15); backdrop-filter: blur(8px);
+  border: 1px solid rgba(45,255,214,0.3);
+  font-size: 1.1rem; cursor: pointer; color: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Camera permission screen */
+.cam-permission {
+  position: absolute; inset: 0;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px; text-align: center; gap: 16px;
+  z-index: 10;
+}
+.cam-permission.hidden { display: none; }
+.perm-icon { font-size: 4rem; animation: orbPulse 2s ease-in-out infinite; }
+.perm-title { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--gold); }
+.perm-sub { font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+.btn-allow {
+  padding: 14px 36px; border: none; border-radius: 16px; cursor: pointer;
+  font-family: 'Fredoka One', cursive; font-size: 1rem;
+  background: linear-gradient(135deg, var(--orange), var(--gold)); color: #1a0800;
+  box-shadow: 0 0 24px rgba(255,180,40,0.3);
+}
+
+/* ── Capture flash ── */
+.flash {
+  position: fixed; inset: 0; background: white; pointer-events: none;
+  opacity: 0; z-index: 999;
+  animation: none;
+}
+.flash.go { animation: flashGo 0.4s ease-out forwards; }
+@keyframes flashGo { 0%{opacity:0.9} 100%{opacity:0} }
+
+/* ── Toast ── */
+#toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: rgba(10,15,25,0.92); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,217,61,0.25); border-radius: 14px;
+  padding: 10px 22px; font-size: 0.8rem; font-weight: 800; color: #fff;
+  opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 1000;
+  white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Confetti ── */
+#conf { position: fixed; inset: 0; pointer-events: none; z-index: 998; overflow: hidden; }
+.c { position: absolute; top: -14px; animation: cFall linear forwards; }
+@keyframes cFall {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(600deg) translateX(var(--dx)); opacity: 0; }
+}
+
+/* Entrance animation for intro */
+.intro-inner > * {
+  animation: entryFade 0.6s ease both;
+}
+.intro-inner > *:nth-child(1) { animation-delay: 0.0s; }
+.intro-inner > *:nth-child(2) { animation-delay: 0.15s; }
+.intro-inner > *:nth-child(3) { animation-delay: 0.3s; }
+.intro-inner > *:nth-child(4) { animation-delay: 0.4s; }
+.intro-inner > *:nth-child(5) { animation-delay: 0.5s; }
+.intro-inner > *:nth-child(6) { animation-delay: 0.6s; }
+.intro-inner > *:nth-child(7) { animation-delay: 0.7s; }
+@keyframes entryFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- Flash & Fx layers -->
+<div class="flash" id="flash"></div>
+<div id="conf"></div>
+<div id="toast"></div>
+
+<!-- ══════ SCREEN 1: INTRO ══════ -->
+<div class="screen active" id="s-intro">
+
+  <!-- Starfield -->
+  <div class="starfield" id="starfield"></div>
+
+  <div class="intro-inner">
+
+    <div class="brand-tag">🛁 バスボール魔法 · Bath Ball Magic</div>
+
+    <!-- Orb -->
+    <div class="orb-wrap" onclick="launchConfetti()">
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+      <div class="orb">⭐</div>
+    </div>
+
+    <div class="char-reveal-name">キラ</div>
+    <div class="char-reveal-sub">Kira · 星竜 · Star Dragon</div>
+
+    <div class="rarity-row">
+      <span class="badge badge-ssr">✦ SSR</span>
+      <span class="badge badge-new">🆕 NEW</span>
+    </div>
+
+    <div class="intro-slogan">
+      <div class="who">キラ からのメッセージ</div>
+      ほしのひかりをあびて、きみのゆめをかなえてあげる！⭐<br>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);font-family:'Nunito',sans-serif;font-weight:700">
+        星の光を浴びて、君の夢を叶えてあげる！
+      </span>
+    </div>
+
+    <!-- Audio -->
+    <button class="btn-voice" id="btnVoice" onclick="toggleVoice()">
+      🎵 キラのこえ · タップして再生
+    </button>
+
+    <!-- AR Launch -->
+    <button class="btn-ar" onclick="launchAR()">
+      📱 ARで召喚する · Summon in AR
+    </button>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-v" style="color:var(--gold)">✦✦✦</div>
+        <div class="stat-k">レア度</div>
+      </div>
+      <div class="stat">
+        <div class="stat-v" style="color:var(--teal)">∞</div>
+        <div class="stat-k">ほしパワー</div>
+      </div>
+      <div class="stat">
+        <div class="stat-v" style="color:var(--pink)">SSR</div>
+        <div class="stat-k">かくりつ</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ SCREEN 2: AR CAMERA ══════ -->
+<div class="screen" id="s-ar">
+
+  <!-- Camera feed -->
+  <video id="camera-video" autoplay playsinline muted></video>
+
+  <!-- AR visual layers (on top of camera) -->
+  <div class="ar-grid-floor"></div>
+  <div class="ar-scanline"></div>
+
+  <div class="ar-char-layer">
+    <div class="ar-char-wrap">
+      <div class="ar-sparks">
+        <span class="spark">✦</span>
+        <span class="spark">⭐</span>
+        <span class="spark">💫</span>
+        <span class="spark">✨</span>
+        <span class="spark">🌟</span>
+        <span class="spark">✦</span>
+      </div>
+      <span class="ar-char-emoji">⭐</span>
+      <div class="ar-shadow"></div>
+    </div>
+  </div>
+
+  <!-- HUD Top -->
+  <div class="ar-hud-top">
+    <div class="hud-left">
+      <button class="btn-close-ar" onclick="closeAR()">✕</button>
+    </div>
+    <div class="ar-live-badge">
+      <div class="live-dot"></div>
+      AR LIVE
+    </div>
+    <div class="ar-char-tag">キラ ⭐</div>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="ar-controls">
+    <button class="btn-voice-ar" id="btnVoiceAR" onclick="toggleVoiceAR()" title="Voice">🔊</button>
+    <button class="btn-capture" onclick="captureAR()">📸 スクリーンショット</button>
+    <button class="btn-close-ar" onclick="closeAR()">🏠</button>
+  </div>
+
+  <!-- Permission overlay -->
+  <div class="cam-permission" id="cam-perm">
+    <div class="perm-icon">📷</div>
+    <div class="perm-title">カメラを許可してね</div>
+    <div class="perm-sub">
+      キラをあなたの世界に召喚するには<br>カメラへのアクセスが必要です<br><br>
+      <small style="opacity:0.5">Camera access needed to place Kira in your world</small>
+    </div>
+    <button class="btn-allow" onclick="requestCamera()">カメラを許可する ✦</button>
+  </div>
+
+</div>
+
+<script>
+// ── Stars ──
+const sf = document.getElementById('starfield');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = 1 + Math.random() * 2.5;
+  s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s`;
+  sf.appendChild(s);
+}
+
+// ── Screen manager ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── Voice (intro) ──
+let speaking = false;
+const slogans = [
+  'ほしのひかりをあびて、きみのゆめをかなえてあげる！',
+  'キラといっしょなら、どんなゆめもかなうよ！',
+  'きみのおふろに、まほうのほしをふらせてあげる！'
+];
+let sIdx = 0;
+
+function speak(text, pitch = 1.2, rate = 0.88) {
+  if (!('speechSynthesis' in window)) { showToast('⚠️ 音声未対応のブラウザです'); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP'; u.pitch = pitch; u.rate = rate; u.volume = 1;
+  u.onstart = () => { speaking = true; updateVoiceBtns(); };
+  u.onend = u.onerror = () => { speaking = false; updateVoiceBtns(); };
+  speechSynthesis.speak(u);
+}
+
+function toggleVoice() {
+  if (speaking) { speechSynthesis.cancel(); speaking = false; updateVoiceBtns(); return; }
+  speak(slogans[sIdx++ % slogans.length]);
+}
+function toggleVoiceAR() { toggleVoice(); }
+function updateVoiceBtns() {
+  const v = document.getElementById('btnVoice');
+  const va = document.getElementById('btnVoiceAR');
+  if (v)  v.className  = 'btn-voice'    + (speaking ? ' playing' : '');
+  if (va) va.textContent = speaking ? '⏹' : '🔊';
+  if (v && !speaking) v.textContent = '🎵 キラのこえ · タップして再生';
+  if (v &&  speaking) v.textContent = '⏹ 再生中...';
+}
+
+// ── AR Launch ──
+let videoStream = null;
+
+function launchAR() {
+  showScreen('s-ar');
+  // Check if we already have stream
+  if (videoStream) {
+    document.getElementById('cam-perm').classList.add('hidden');
+    return;
+  }
+  // Show permission screen first
+  document.getElementById('cam-perm').classList.remove('hidden');
+}
+
+function requestCamera() {
+  document.getElementById('cam-perm').innerHTML = `
+    <div class="perm-icon" style="animation:orbPulse 1s infinite">⏳</div>
+    <div class="perm-title" style="color:#4DC8FF">カメラを起動中...</div>
+  `;
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+    audio: false
+  })
+  .then(stream => {
+    videoStream = stream;
+    const vid = document.getElementById('camera-video');
+    vid.srcObject = stream;
+    vid.play();
+    document.getElementById('cam-perm').classList.add('hidden');
+    // Auto-play slogan after 1.5s
+    setTimeout(() => speak(slogans[sIdx++ % slogans.length]), 1500);
+  })
+  .catch(err => {
+    // Fallback: show fake AR without real camera
+    document.getElementById('cam-perm').classList.add('hidden');
+    document.getElementById('camera-video').style.display = 'none';
+    // Add dark bg as fallback
+    document.getElementById('s-ar').style.background = 'linear-gradient(135deg,#0a1020,#0d1830)';
+    showToast('📷 カメラなしでAR表示中（デモモード）');
+    setTimeout(() => speak(slogans[sIdx++ % slogans.length]), 800);
+  });
+}
+
+function closeAR() {
+  showScreen('s-intro');
+  if (speaking) { speechSynthesis.cancel(); speaking = false; updateVoiceBtns(); }
+}
+
+// ── Capture screenshot ──
+function captureAR() {
+  // Flash effect
+  const flash = document.getElementById('flash');
+  flash.classList.add('go');
+  setTimeout(() => flash.classList.remove('go'), 500);
+  // Vibrate if supported
+  if (navigator.vibrate) navigator.vibrate(80);
+  showToast('📸 スクリーンショットを保存！（スクショボタンで保存してね）');
+  speak('ぱしゃっ！すてきなしゃしんがとれたよ！');
+}
+
+// ── Confetti ──
+function launchConfetti() {
+  const colors = ['#FFD93D','#FF8C42','#FF4FA3','#2DFFD6','#fff','#ffe566'];
+  const c = document.getElementById('conf');
+  for (let i = 0; i < 80; i++) {
+    const d = document.createElement('div');
+    const dx = (Math.random()-0.5)*140;
+    d.className = 'c';
+    d.style.cssText = `left:${Math.random()*100}%;width:${5+Math.random()*9}px;height:${5+Math.random()*9}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.4?'50%':'3px'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;--dx:${dx}px`;
+    c.appendChild(d);
+    setTimeout(() => d.remove(), 3500);
+  }
+}
+
+// ── Toast ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Auto confetti on load
+setTimeout(launchConfetti, 500);
+</script>
+</body>
+</html>
