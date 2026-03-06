@@ -331,6 +331,22 @@ function showToast(msg) {
 
 // Auto launch confetti on load
 setTimeout(launchConfetti, 600);
+
+// ── Auto-play voice on first user interaction ──
+// Browsers block audio until a touch event - we hook the FIRST tap anywhere
+let autoPlayed = false;
+function tryAutoPlay() {
+  if (autoPlayed) return;
+  autoPlayed = true;
+  document.removeEventListener('touchstart', tryAutoPlay);
+  document.removeEventListener('click', tryAutoPlay);
+  // Small delay so the page feels settled before speaking
+  setTimeout(() => {
+    if (!isSpeaking) toggleAudio();
+  }, 600);
+}
+document.addEventListener('touchstart', tryAutoPlay, { once: true });
+document.addEventListener('click',      tryAutoPlay, { once: true });
 </script>
 </body>
 </html>

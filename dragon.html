@@ -260,6 +260,15 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 setTimeout(launchConfetti, 600);
+
+let autoPlayed = false;
+function tryAutoPlay() {
+  if (autoPlayed) return;
+  autoPlayed = true;
+  setTimeout(() => { if (!isSpeaking) toggleAudio(); }, 600);
+}
+document.addEventListener('touchstart', tryAutoPlay, { once: true });
+document.addEventListener('click',      tryAutoPlay, { once: true });
 </script>
 </body>
 </html>

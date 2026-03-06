@@ -688,6 +688,16 @@ function showToast(msg) {
 
 // Auto confetti on load
 setTimeout(launchConfetti, 500);
+
+// Auto-play voice on first interaction
+let autoPlayed = false;
+function tryAutoPlay() {
+  if (autoPlayed) return;
+  autoPlayed = true;
+  setTimeout(() => { if (!speaking) toggleVoice(); }, 700);
+}
+document.addEventListener('touchstart', tryAutoPlay, { once: true });
+document.addEventListener('click',      tryAutoPlay, { once: true });
 </script>
 </body>
 </html>
