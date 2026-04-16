@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>雑談メモ｜宇宙と映画</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --panel: #16161f;
+    --border: #2a2a3a;
+    --text: #e8e4dc;
+    --muted: #888;
+    --accent: #c8a96e;
+    --keyword: #f0c060;
+    --note-bg: #1a1f2e;
+    --note-border: #3a4a6a;
+    /* 注音：提高亮度与饱和度，和正文灰米色区分更明显 */
+    --ruby-color: #7dd3fc;
+    --ruby-shadow: rgba(0, 0, 0, 0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* 系统日文字体栈：离线可开，不依赖 Google Fonts */
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, "Noto Serif JP", serif;
+    font-size: 18px;
+    line-height: 2.35;
+    padding: max(28px, env(safe-area-inset-top, 0px) + 12px) max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px));
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  header {
+    text-align: center;
+    padding: 24px 8px 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    overflow: visible;
+  }
+
+  header h1 {
+    font-size: clamp(1.15em, 4.2vw, 1.6em);
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    line-height: 1.95;
+    padding-top: 0.35em;
+    overflow: visible;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.85em;
+    margin-top: 6px;
+  }
+
+  .section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 18px 28px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: visible;
+  }
+
+  @media (min-width: 480px) {
+    .section { padding: 30px 36px 28px; }
+  }
+
+  .section-num {
+    position: absolute;
+    top: -14px;
+    left: 24px;
+    background: var(--accent);
+    color: #0f0f14;
+    font-weight: 700;
+    font-size: 0.78em;
+    padding: 2px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  h2 {
+    color: var(--accent);
+    font-size: 1.05em;
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+    padding: 0.4em 0 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.95;
+    overflow: visible;
+  }
+
+  p {
+    margin-bottom: 16px;
+    color: var(--text);
+    overflow: visible;
+    padding-top: 0.15em;
+  }
+
+  /* ふりがな：避免注音与汉字错位、顶部被裁切 */
+  ruby {
+    ruby-position: over;
+    ruby-align: center;
+  }
+
+  rt {
+    /* 相对正文字号放大；手机用 clamp 保证不小于约 12px */
+    font-size: clamp(12px, 3.85vmin, 0.58em);
+    color: var(--ruby-color);
+    font-weight: 600;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+    letter-spacing: 0;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    text-align: center;
+    transform: translateZ(0);
+    text-shadow: 0 1px 2px var(--ruby-shadow);
+  }
+
+  h2 rt, header h1 rt {
+    font-size: clamp(13px, 3.6vmin, 0.52em);
+  }
+
+  @media (max-width: 480px) {
+    body {
+      font-size: 19px;
+    }
+    rt {
+      font-size: clamp(13px, 4.1vmin, 0.62em);
+    }
+    h2 rt, header h1 rt {
+      font-size: clamp(12px, 3.9vmin, 0.55em);
+    }
+  }
+
+  strong {
+    color: var(--keyword);
+    font-weight: 700;
+  }
+
+  .note {
+    background: var(--note-bg);
+    border-left: 3px solid var(--note-border);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-size: 0.82em;
+    color: #8ca8c8;
+    line-height: 1.75;
+  }
+
+  .note::before {
+    content: "💬 要点 ▸ ";
+    color: var(--note-border);
+    font-weight: 700;
+  }
+
+  .tip {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75em;
+    margin-top: 40px;
+    padding: 24px 8px 8px;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>雑談メモ｜<ruby>宇宙<rt>うちゅう</rt></ruby>と<ruby>映画<rt>えいが</rt></ruby></h1>
+  <p>Zoom 発表用 / 2026年4月17日</p>
+</header>
+
+<!-- Section 1 -->
+<div class="section">
+  <div class="section-num">① 映画紹介</div>
+  <h2>「<ruby>プロジェクト・ヘイル・メアリー<rt>ぷろじぇくと・へいる・めありー</rt></ruby>」</h2>
+
+  <p>
+    <ruby>最近<rt>さいきん</rt></ruby>、<ruby>話題<rt>わだい</rt></ruby>になっている <strong>SF<ruby>映画<rt>えいが</rt></ruby></strong> の<ruby>話<rt>はなし</rt></ruby>をしたいと<ruby>思<rt>おも</rt></ruby>います。
+  </p>
+
+  <p>
+    <ruby>今年<rt>ことし</rt></ruby><ruby>上映<rt>じょうえい</rt></ruby>されたばかりの、<strong>「<ruby>プロジェクト・ヘイル・メアリー<rt>ぷろじぇくと・へいる・めありー</rt></ruby>」</strong>。
+    <ruby>原作<rt>げんさく</rt></ruby>は、あの「<strong><ruby>ザ・マーシャン<rt>ざ・まーしゃん</rt></ruby></strong>」を<ruby>書<rt>か</rt></ruby>いた <strong><ruby>アンディ・ウィアー<rt>あんでぃ・うぃあー</rt></ruby></strong> の<ruby>同名<rt>どうめい</rt></ruby><ruby>小説<rt>しょうせつ</rt></ruby>です。
+  </p>
+
+  <p>
+    <ruby>物語<rt>ものがたり</rt></ruby>はこんな<ruby>感<rt>かん</rt></ruby>じです。<ruby>太陽<rt>たいよう</rt></ruby>の<ruby>光<rt>ひかり</rt></ruby>が<ruby>弱<rt>よわ</rt></ruby>まっていき、<ruby>地球<rt>ちきゅう</rt></ruby>が<ruby>危機<rt>きき</rt></ruby>に<ruby>瀕<rt>ひん</rt></ruby>する<ruby>中<rt>なか</rt></ruby>、<ruby>科学者<rt>かがくしゃ</rt></ruby>の<strong><ruby>グレース<rt>ぐれーす</rt></ruby></strong>は<ruby>宇宙船<rt>うちゅうせん</rt></ruby>で<ruby>目<rt>め</rt></ruby>を<ruby>覚<rt>さ</rt></ruby>まします。<ruby>記憶<rt>きおく</rt></ruby>がなく、<ruby>仲間<rt>なかま</rt></ruby>の<ruby>宇宙飛行士<rt>うちゅうひこうし</rt></ruby>は<ruby>全員<rt>ぜんいん</rt></ruby><ruby>死亡<rt>しぼう</rt></ruby>。そして<ruby>光年<rt>こうねん</rt></ruby><ruby>先<rt>さき</rt></ruby>の<ruby>星系<rt>せいけい</rt></ruby>で、<ruby>岩<rt>いわ</rt></ruby>のような<ruby>外見<rt>がいけん</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ<ruby>友好的<rt>ゆうこうてき</rt></ruby>な<ruby>宇宙人<rt>うちゅうじん</rt></ruby>「<strong><ruby>ロッキー<rt>ろっきー</rt></ruby></strong>」と<ruby>出会<rt>であ</rt></ruby>い、<ruby>共<rt>とも</rt></ruby>に<ruby>星<rt>ほし</rt></ruby>を<ruby>救<rt>すく</rt></ruby>う<ruby>計画<rt>けいかく</rt></ruby>を<ruby>立<rt>た</rt></ruby>てます。
+  </p>
+
+  <p>
+    <ruby>評判<rt>ひょうばん</rt></ruby>はとても<ruby>良<rt>よ</rt></ruby>くて、「<ruby>宇宙版<rt>うちゅうばん</rt></ruby>バディムービー」と<ruby>言<rt>い</rt></ruby>われています。<ruby>言葉<rt>ことば</rt></ruby>も<ruby>通<rt>つう</rt></ruby>じない<ruby>人間<rt>にんげん</rt></ruby>と<ruby>宇宙人<rt>うちゅうじん</rt></ruby>が<ruby>友情<rt>ゆうじょう</rt></ruby>を<ruby>育<rt>はぐく</rt></ruby>む<ruby>展開<rt>てんかい</rt></ruby>が、<ruby>見<rt>み</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>に<strong><ruby>希望<rt>きぼう</rt></ruby></strong>と<ruby>温<rt>あたた</rt></ruby>かさを<ruby>感<rt>かん</rt></ruby>じさせます。
+  </p>
+
+  <div class="note">介绍《Project Hail Mary》，改编自《火星救援》同作者安迪·威尔的小说。科学家格雷斯独自醒在宇宙飞船上，与外星人"洛基"携手拯救各自星球，以温情与希望广获好评。</div>
+</div>
+
+<!-- Section 2 -->
+<div class="section">
+  <div class="section-num">② 名作との比較</div>
+  <h2><ruby>二<rt>ふた</rt></ruby>つの<ruby>名作<rt>めいさく</rt></ruby>との<ruby>比較<rt>ひかく</rt></ruby></h2>
+
+  <p>
+    この<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>た<ruby>人<rt>ひと</rt></ruby>たちは、よく<ruby>二<rt>ふた</rt></ruby>つの<ruby>名作<rt>めいさく</rt></ruby>と<ruby>比<rt>くら</rt></ruby>べます。
+  </p>
+
+  <p>
+    <ruby>一<rt>ひと</rt></ruby>つ<ruby>目<rt>め</rt></ruby>は<ruby>同<rt>おな</rt></ruby>じ<strong><ruby>アンディ・ウィアー<rt>あんでぃ・うぃあー</rt></ruby></strong><ruby>原作<rt>げんさく</rt></ruby>の <strong>「<ruby>ザ・マーシャン<rt>ざ・まーしゃん</rt></ruby>」</strong>。<ruby>孤独<rt>こどく</rt></ruby>な<ruby>宇宙<rt>うちゅう</rt></ruby>での<ruby>生存<rt>せいぞん</rt></ruby>、<ruby>ユーモア<rt>ゆーもあ</rt></ruby>と<ruby>科学<rt>かがく</rt></ruby>の<ruby>融合<rt>ゆうごう</rt></ruby>、という<ruby>点<rt>てん</rt></ruby>が<ruby>共通<rt>きょうつう</rt></ruby>しています。
+  </p>
+
+  <p>
+    <ruby>二<rt>ふた</rt></ruby>つ<ruby>目<rt>め</rt></ruby>は<strong><ruby>クリストファー・ノーラン<rt>くりすとふぁー・のーらん</rt></ruby></strong><ruby>監督<rt>かんとく</rt></ruby>の <strong>「<ruby>インターステラー<rt>いんたーすてらー</rt></ruby>」</strong>。<ruby>壮大<rt>そうだい</rt></ruby>な<ruby>宇宙<rt>うちゅう</rt></ruby>スケール、<ruby>感情<rt>かんじょう</rt></ruby>をテーマにした<ruby>深<rt>ふか</rt></ruby>い<ruby>物語<rt>ものがたり</rt></ruby>——この<ruby>点<rt>てん</rt></ruby>が<ruby>似<rt>に</rt></ruby>ています。ただし「<ruby>インターステラー<rt>いんたーすてらー</rt></ruby>」は<ruby>難解<rt>なんかい</rt></ruby>な<ruby>相対性理論<rt>そうたいせいりろん</rt></ruby>が<ruby>多<rt>おお</rt></ruby>いですが、「<ruby>プロジェクト・ヘイル・メアリー<rt>ぷろじぇくと・へいる・めありー</rt></ruby>」はもう<ruby>少<rt>すこ</rt></ruby>しポップでわかりやすい<ruby>雰囲気<rt>ふんいき</rt></ruby>です。
+  </p>
+
+  <div class="note">与《火星救援》（同作者）和《星际穿越》（诺兰）做比较。前者风格相近，后者宏大深沉；《Project Hail Mary》相对通俗温馨，称为"科幻界的温情电影"。</div>
+</div>
+
+<!-- Section 3 -->
+<div class="section">
+  <div class="section-num">③ 主演について</div>
+  <h2><strong><ruby>ライアン・ゴズリング<rt>らいあん・ごずりんぐ</rt></ruby></strong>について</h2>
+
+  <p>
+    <ruby>主演<rt>しゅえん</rt></ruby>は<strong><ruby>ライアン・ゴズリング<rt>らいあん・ごずりんぐ</rt></ruby></strong>です。
+  </p>
+
+  <p>
+    <ruby>彼<rt>かれ</rt></ruby>は「<strong><ruby>ブレードランナー２０４９<rt>ぶれーどらんなー・にせんよんじゅうきゅう</rt></ruby></strong>」でも<ruby>孤独<rt>こどく</rt></ruby>な<ruby>主人公<rt>しゅじんこう</rt></ruby>を<ruby>演<rt>えん</rt></ruby>じていました。そして「<strong><ruby>バービー<rt>ばーびー</rt></ruby></strong>」では<ruby>少<rt>すこ</rt></ruby>し<ruby>抜<rt>ぬ</rt></ruby>けた<ruby>ケン<rt>けん</rt></ruby>を<ruby>演<rt>えん</rt></ruby>じて<ruby>大<rt>おお</rt></ruby>ヒット。でも<ruby>今回<rt>こんかい</rt></ruby>のグレース<ruby>役<rt>やく</rt></ruby>は、どことなく<ruby>憂鬱<rt>ゆううつ</rt></ruby>で<ruby>孤独<rt>こどく</rt></ruby>な<ruby>雰囲気<rt>ふんいき</rt></ruby>があって、「<ruby>ブレードランナー<rt>ぶれーどらんなー</rt></ruby>」<ruby>時代<rt>じだい</rt></ruby>の<ruby>彼<rt>かれ</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>い<ruby>感<rt>かん</rt></ruby>じがします。<ruby>ああいう<rt>ああいう</rt></ruby><ruby>憂鬱系<rt>ゆううつけい</rt></ruby>は<ruby>彼<rt>かれ</rt></ruby>に<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>ハマる<rt>はまる</rt></ruby>なと<ruby>思<rt>おも</rt></ruby>いました。
+  </p>
+
+  <div class="note">男主角瑞恩·高斯林（ライアン・ゴズリング）。提到他的两部关联作品：《银翼杀手2049》（孤独角色）和《芭比》（大反差喜剧）。这次的格雷斯忧郁孤独，与前者风格相近，很适合他。</div>
+</div>
+
+<!-- Section 4 -->
+<div class="section">
+  <div class="section-num">④ 現実の宇宙ニュース</div>
+  <h2>NASA「<strong><ruby>アルテミス II<rt>あるてみす・つー</rt></ruby></strong>」<ruby>月面飛行<rt>げつめんひこう</rt></ruby></h2>
+
+  <p>
+    さて、<ruby>映画<rt>えいが</rt></ruby>の<ruby>話<rt>はなし</rt></ruby>はここまでにして、<ruby>現実<rt>げんじつ</rt></ruby>の<ruby>宇宙<rt>うちゅう</rt></ruby>ニュースへ<ruby>移<rt>うつ</rt></ruby>りましょう。
+  </p>
+
+  <p>
+    なんと<ruby>今月<rt>こんげつ</rt></ruby><ruby>初<rt>はじ</rt></ruby>め、<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>人間<rt>にんげん</rt></ruby>が<ruby>月<rt>つき</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くへ<ruby>行<rt>い</rt></ruby>ったんです。<strong>NASA</strong>の「<strong><ruby>アルテミス II<rt>あるてみす・つー</rt></ruby></strong>」<ruby>ミッション<rt>みっしょん</rt></ruby>です。<strong>2026<ruby>年<rt>ねん</rt></ruby>4<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>にち</rt></ruby></strong>に<ruby>打<rt>う</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げられ、<strong>4<ruby>月<rt>がつ</rt></ruby>6<ruby>日<rt>にち</rt></ruby></strong>に<ruby>月<rt>つき</rt></ruby>の<ruby>フライバイ<rt>ふらいばい</rt></ruby>——つまり<ruby>月<rt>つき</rt></ruby>を<ruby>周回<rt>しゅうかい</rt></ruby>しながら<ruby>飛行<rt>ひこう</rt></ruby>——を<ruby>行<rt>おこな</rt></ruby>いました。
+  </p>
+
+  <p>
+    <ruby>クルー<rt>くるー</rt></ruby>は4<ruby>名<rt>めい</rt></ruby>。NASA<ruby>宇宙飛行士<rt>うちゅうひこうし</rt></ruby>の <strong><ruby>リード・ワイズマン<rt>りーど・わいずまん</rt></ruby></strong>、<strong><ruby>ビクター・グローバー<rt>びくたー・ぐろーばー</rt></ruby></strong>、<strong><ruby>クリスティーナ・コッホ<rt>くりすてぃーな・こっほ</rt></ruby></strong>と、<ruby>カナダ<rt>かなだ</rt></ruby><ruby>宇宙庁<rt>うちゅうちょう</rt></ruby>の <strong><ruby>ジェレミー・ハンセン<rt>じぇれみー・はんせん</rt></ruby></strong>。
+  </p>
+
+  <p>
+    この4<ruby>名<rt>めい</rt></ruby>が<strong>7<ruby>時間<rt>じかん</rt></ruby></strong>にわたって<ruby>月面<rt>げつめん</rt></ruby>を<ruby>観察<rt>かんさつ</rt></ruby>し、<ruby>約<rt>やく</rt></ruby><strong>1<ruby>万枚<rt>まんまい</rt></ruby></strong>もの<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮影<rt>さつえい</rt></ruby>しました。そして<ruby>人類<rt>じんるい</rt></ruby>が<ruby>宇宙<rt>うちゅう</rt></ruby>で<ruby>到達<rt>とうたつ</rt></ruby>した<ruby>最遠距離<rt>さいえんきょり</rt></ruby>の<ruby>記録<rt>きろく</rt></ruby>を<ruby>更新<rt>こうしん</rt></ruby>——<strong><ruby>アポロ<rt>あぽろ</rt></ruby>13<ruby>号<rt>ごう</rt></ruby></strong>の<ruby>記録<rt>きろく</rt></ruby>を<ruby>超<rt>こ</rt></ruby>えました。
+  </p>
+
+  <div class="note">介绍NASA阿尔忒弥斯2号任务。2026年4月1日发射，4月6日实现月球飞越，4名宇航员历时7小时拍摄约1万张照片，打破人类太空旅行最远距离纪录（超越阿波罗13号）。</div>
+</div>
+
+<!-- Section 5 -->
+<div class="section">
+  <div class="section-num">⑤ 地球と月の写真</div>
+  <h2><ruby>現代<rt>げんだい</rt></ruby>の「<strong><ruby>アースライズ<rt>あーすらいず</rt></ruby></strong>」</h2>
+
+  <p>
+    <ruby>撮影<rt>さつえい</rt></ruby>された<ruby>写真<rt>しゃしん</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>最<rt>もっと</rt></ruby>も<ruby>話題<rt>わだい</rt></ruby>になったのが「<strong><ruby>アースセット<rt>あーすせっと</rt></ruby></strong>」と「<strong><ruby>アースライズ<rt>あーすらいず</rt></ruby></strong>」の<ruby>写真<rt>しゃしん</rt></ruby>です。
+  </p>
+
+  <p>
+    「<ruby>アースセット<rt>あーすせっと</rt></ruby>」とは、<ruby>月<rt>つき</rt></ruby>の<ruby>地平線<rt>ちへいせん</rt></ruby>の<ruby>向<rt>む</rt></ruby>こうに<ruby>地球<rt>ちきゅう</rt></ruby>が<ruby>沈<rt>しず</rt></ruby>んでいく<ruby>様子<rt>ようす</rt></ruby>。<ruby>三日月<rt>みかづき</rt></ruby>のような<ruby>形<rt>かたち</rt></ruby>に<ruby>光<rt>ひか</rt></ruby>る<ruby>地球<rt>ちきゅう</rt></ruby>が、<ruby>月<rt>つき</rt></ruby>の<ruby>表面<rt>ひょうめん</rt></ruby>の<ruby>クレーター<rt>くれーたー</rt></ruby><ruby>越<rt>ご</rt></ruby>しに<ruby>見<rt>み</rt></ruby>える——まるで SF <ruby>映画<rt>えいが</rt></ruby>のワンシーンのような<ruby>光景<rt>こうけい</rt></ruby>です。
+  </p>
+
+  <p>
+    この<ruby>写真<rt>しゃしん</rt></ruby>は <strong><ruby>アポロ<rt>あぽろ</rt></ruby>8<ruby>号<rt>ごう</rt></ruby></strong> が<strong>1968<ruby>年<rt>ねん</rt></ruby></strong>に<ruby>撮影<rt>さつえい</rt></ruby>した「<ruby>アースライズ<rt>あーすらいず</rt></ruby>」という<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>思<rt>おも</rt></ruby>い<ruby>起<rt>お</rt></ruby>こさせます——<strong>58<ruby>年後<rt>ねんご</rt></ruby></strong>に<ruby>同<rt>おな</rt></ruby>じ<ruby>感動<rt>かんどう</rt></ruby>が<ruby>蘇<rt>よみがえ</rt></ruby>った<ruby>感<rt>かん</rt></ruby>じです。
+  </p>
+
+  <p>
+    さらに、<ruby>月<rt>つき</rt></ruby>の<ruby>裏側<rt>うらがわ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>った<ruby>時<rt>とき</rt></ruby>、<ruby>宇宙船<rt>うちゅうせん</rt></ruby>は<ruby>地球<rt>ちきゅう</rt></ruby>との<ruby>通信<rt>つうしん</rt></ruby>が<strong>40<ruby>分間<rt>ぷんかん</rt></ruby></strong><ruby>途絶<rt>とだ</rt></ruby>えました。その<ruby>間<rt>あいだ</rt></ruby>に<ruby>月<rt>つき</rt></ruby>が<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>隠<rt>かく</rt></ruby>す<ruby>日食<rt>にっしょく</rt></ruby>も<ruby>観測<rt>かんそく</rt></ruby>できたそうです。<ruby>皆既日食<rt>かいきにっしょく</rt></ruby>の<ruby>継続時間<rt>けいぞくじかん</rt></ruby>が<ruby>地球上<rt>ちきゅうじょう</rt></ruby>では<ruby>数分<rt>すうふん</rt></ruby>なのに、<ruby>宇宙<rt>うちゅう</rt></ruby>からは<ruby>約<rt>やく</rt></ruby><strong>1<ruby>時間<rt>じかん</rt></ruby></strong>も<ruby>見<rt>み</rt></ruby>えたそうで、<ruby>すごい<rt>すごい</rt></ruby>ですよね。
+  </p>
+
+  <div class="note">介绍阿尔忒弥斯2号拍摄的"地球落"与"地球升"照片，与1968年阿波罗8号经典照片呼应。宇航员还经历了40分钟通信中断，并观测到约1小时的日食（地球上只有几分钟）。</div>
+</div>
+
+<!-- Section 6 -->
+<div class="section">
+  <div class="section-num">⑥ 宇宙から見た地球・余談</div>
+  <h2><ruby>万里<rt>ばんり</rt></ruby>の<ruby>長城<rt>ちょうじょう</rt></ruby>と<ruby>アルゴリズム月<rt>あるごりずむつき</rt></ruby></h2>
+
+  <p>
+    <ruby>宇宙<rt>うちゅう</rt></ruby>から<ruby>地球<rt>ちきゅう</rt></ruby>を<ruby>見<rt>み</rt></ruby>るといえば、<ruby>面白<rt>おもしろ</rt></ruby>い<ruby>話題<rt>わだい</rt></ruby>があります。
+  </p>
+
+  <p>
+    よく<ruby>聞<rt>き</rt></ruby>かれる<ruby>話<rt>はなし</rt></ruby>——「<strong><ruby>万里<rt>ばんり</rt></ruby>の<ruby>長城<rt>ちょうじょう</rt></ruby></strong>は<ruby>宇宙<rt>うちゅう</rt></ruby>から<ruby>見<rt>み</rt></ruby>えるか？」<ruby>結論<rt>けつろん</rt></ruby>から<ruby>言<rt>い</rt></ruby>うと、<ruby>肉眼<rt>にくがん</rt></ruby>では<ruby>基本的<rt>きほんてき</rt></ruby>に<ruby>見<rt>み</rt></ruby>えない。<ruby>幅<rt>はば</rt></ruby>がせいぜい<ruby>数<rt>すう</rt></ruby>メートルで、<ruby>宇宙<rt>うちゅう</rt></ruby>から<ruby>識別<rt>しきべつ</rt></ruby>するには<ruby>細<rt>ほそ</rt></ruby>すぎます。<ruby>中国<rt>ちゅうごく</rt></ruby>の<ruby>宇宙飛行士<rt>うちゅうひこうし</rt></ruby>・<strong><ruby>楊利偉<rt>よう・りい</rt></ruby></strong>（2003<ruby>年<rt>ねん</rt></ruby>）も「<ruby>見<rt>み</rt></ruby>えなかった」と<ruby>語<rt>かた</rt></ruby>り、<ruby>中国<rt>ちゅうごく</rt></ruby><ruby>国内<rt>こくない</rt></ruby>でも「<ruby>長城<rt>ちょうじょう</rt></ruby><ruby>神話<rt>しんわ</rt></ruby>」の<ruby>見直<rt>みなお</rt></ruby>しが<ruby>起<rt>お</rt></ruby>こりました。
+  </p>
+
+  <p>
+    もう<ruby>一<rt>ひと</rt></ruby>つ、<ruby>スマートフォン<rt>すまーとふぉん</rt></ruby>の<ruby>話題<rt>わだい</rt></ruby>にもつながります。<strong><ruby>ファーウェイ<rt>ふぁーうぇい</rt></ruby></strong>など<ruby>中国<rt>ちゅうごく</rt></ruby>メーカーが<ruby>採用<rt>さいよう</rt></ruby>している「<strong><ruby>アルゴリズム月<rt>あるごりずむつき</rt></ruby></strong>」<ruby>問題<rt>もんだい</rt></ruby>です。<ruby>カメラ<rt>かめら</rt></ruby>で<ruby>月<rt>つき</rt></ruby>を<ruby>撮影<rt>さつえい</rt></ruby>すると、<strong>AI</strong> が<ruby>自動的<rt>じどうてき</rt></ruby>に<ruby>月面<rt>げつめん</rt></ruby>のテクスチャを<ruby>付<rt>つ</rt></ruby>け<ruby>加<rt>くわ</rt></ruby>えて、<ruby>実際<rt>じっさい</rt></ruby>より<ruby>鮮明<rt>せんめい</rt></ruby>に<ruby>見<rt>み</rt></ruby>せるという<ruby>技術<rt>ぎじゅつ</rt></ruby>です。ネットでは「これは<ruby>本当<rt>ほんとう</rt></ruby>に<ruby>撮<rt>と</rt></ruby>った<ruby>写真<rt>しゃしん</rt></ruby>なのか、それとも AI が<ruby>作<rt>つく</rt></ruby>った<ruby>絵<rt>え</rt></ruby>なのか？」という<ruby>議論<rt>ぎろん</rt></ruby>が<ruby>巻<rt>ま</rt></ruby>き<ruby>起<rt>お</rt></ruby>こりました。<ruby>リアルな宇宙写真<rt>りあるなうちゅうしゃしん</rt></ruby>と AI<ruby>生成画像<rt>せいせいがぞう</rt></ruby>の<ruby>境界<rt>きょうかい</rt></ruby>が<ruby>曖昧<rt>あいまい</rt></ruby>になる<ruby>時代<rt>じだい</rt></ruby>、<ruby>何<rt>なに</rt></ruby>が「<strong><ruby>本物<rt>ほんもの</rt></ruby></strong>」かを<ruby>考<rt>かんが</rt></ruby>えさせられますね。
+  </p>
+
+  <div class="note">讨论两个趣味话题：①从太空能否看到长城（基本看不到，中国宇航员杨利伟也证实了这一点）；②华为等手机被指用AI算法自动美化月亮照片，引发"什么才是真实照片"的讨论。</div>
+</div>
+
+<!-- Section 7: Closing -->
+<div class="section">
+  <div class="section-num">⑦ まとめ</div>
+  <h2><ruby>締<rt>し</rt></ruby>めの<ruby>言葉<rt>ことば</rt></ruby></h2>
+
+  <p>
+    <ruby>映画<rt>えいが</rt></ruby>の<ruby>中<rt>なか</rt></ruby>の<ruby>宇宙<rt>うちゅう</rt></ruby>と、<ruby>現実<rt>げんじつ</rt></ruby>の<ruby>宇宙<rt>うちゅう</rt></ruby>、どちらも<ruby>今<rt>いま</rt></ruby>すごく<ruby>盛<rt>も</rt></ruby>り<ruby>上<rt>あ</rt></ruby>がっていますよね。SF<ruby>映画<rt>えいが</rt></ruby>が<ruby>人々<rt>ひとびと</rt></ruby>に<ruby>宇宙<rt>うちゅう</rt></ruby>への<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>与<rt>あた</rt></ruby>え、そしてその<ruby>夢<rt>ゆめ</rt></ruby>を<ruby>現実<rt>げんじつ</rt></ruby>の<ruby>宇宙計画<rt>うちゅうけいかく</rt></ruby>が<ruby>形<rt>かたち</rt></ruby>にしていく——そんなサイクルが<ruby>続<rt>つづ</rt></ruby>いているように<ruby>感<rt>かん</rt></ruby>じます。では、<ruby>以上<rt>いじょう</rt></ruby>で<ruby>私<rt>わたし</rt></ruby>の<ruby>雑談<rt>ざつだん</rt></ruby>を<ruby>終<rt>お</rt></ruby>わります。ありがとうございました！
+  </p>
+
+  <div class="note">总结：科幻电影与现实太空探索相辅相成，电影给人以宇宙梦想，现实计划又一步步将梦想变为现实。</div>
+</div>
+
+<p class="tip">★ 太字（黄色）＝キーワード　／　青いふりがな＝読み方ガイド　／　青いボックス＝中文要点</p>
+
+</body>
+</html>
